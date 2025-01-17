@@ -1,5 +1,5 @@
 name: Node.js Build
-
+# hhee
 # Trigger the workflow on specific events
 on:
   push:
@@ -13,8 +13,10 @@ jobs:
 
     steps:
       # Step 1: Check out the code from the repository
-      - name: Checkout repository
+      - name: checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       # Step 2: Set up Node.js environment
       - name: Setup Node.js
@@ -30,6 +32,26 @@ jobs:
       - name: Build the project
         run: npm run build
 
-      # Step 5: Run tests (if you have tests configured)
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out the code from the repository
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+
+      # Step 2: Set up Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20 # Specify your Node.js version
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Run tests
         run: npm test --detectOpenHandles
